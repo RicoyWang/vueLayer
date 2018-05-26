@@ -1,6 +1,6 @@
 import _ from 'lodash'
-export function viewLayer (VueLayer) {
-  VueLayer.prototype._initView = () => {
+export function initviewLayer (VueLayer) {
+  VueLayer.prototype._initView = function () {
     let layer = this
     console.log(layer)
   }

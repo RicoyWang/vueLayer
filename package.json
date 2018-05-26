@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/RicoyWang/vueLayer/issues"
   },
-  "homepage": "https://github.com/RicoyWang/vueLayer#readme"
+  "homepage": "https://github.com/RicoyWang/vueLayer#readme",
+  "dependencies": {
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "lodash": "^4.17.10"
+  }
 }

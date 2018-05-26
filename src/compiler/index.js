@@ -6,16 +6,16 @@ import _ from 'lodash'
  * @param VueLayer
  */
 export function compilerMethods (VueLayer) {
-  VueLayer.prototype._compiler = () => {
-    let vueLayer = this
-    let _vm = vueLayer._vm
-    if (_vm) {
-      this._Notice('vm is undefine')
+  VueLayer.prototype._compiler = function () {
+    console.log('_compiler this is', this)
+    let _vm = this._vm
+    if (!_vm) {
+      this._Notice('vm is undefined')
     }
     for (let key in _vm) {
       let keyreg = key.match(/^VL(\S*)/)
-      if (keyreg && keyreg) {
-        _addToVueLayer.call(this, key.match(/^VL(\S*)/)[1])
+      if (keyreg && keyreg[1]) {
+        _addToVueLayer.call(this, key)
         _canNotUseOnVm.call(this, key)
       }
     }
@@ -24,8 +24,9 @@ export function compilerMethods (VueLayer) {
 }
 
 export function _addToVueLayer (key) {
-  this[`$${key}`] = this._vm[key]
-  this[`VL${key}`] = this._vm[key]
+  let newKey = key.match(/^VL(\S*)/)[1]
+  this[`$${newKey}`] = this._vm[key]
+  this[`VL${newKey}`] = this._vm[key]
 }
 
 /**
