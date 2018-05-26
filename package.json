@@ -1,0 +1,19 @@
+{
+  "name": "vuelayer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://RicoyWang@github.com/RicoyWang/vueLayer.git"
+  },
+  "author": "wangchuan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RicoyWang/vueLayer/issues"
+  },
+  "homepage": "https://github.com/RicoyWang/vueLayer#readme"
+}
