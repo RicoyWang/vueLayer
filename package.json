@@ -1,9 +1,11 @@
 {
-  "name": "vuelayer",
-  "version": "1.0.0",
+  "name": "vue-detach-layer",
+  "version": "1.0.02",
   "description": "",
-  "main": "index.js",
+  "main": "lib/bin/vuedetachlayer.js",
   "scripts": {
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

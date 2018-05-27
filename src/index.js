@@ -14,6 +14,10 @@ function VueLayer (vm) {
   this._vm = vm
 }
 /**
+ * Vue 自身的 以及通用的方法
+ */
+initGeneralMethods(VueLayer)
+/**
  * 关于视图层的代码 比较复杂
  */
 initviewLayer(VueLayer)
@@ -25,10 +29,6 @@ initBusinesLayer(VueLayer)
  * 发送请求层的代码
  */
 initserversLayer(VueLayer)
-/**
- * Vue 自身的 以及通用的方法
- */
-initGeneralMethods(VueLayer)
 /**
  * 处理vm 与vueLayer之间的方法
  */
