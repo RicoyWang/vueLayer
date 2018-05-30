@@ -1,3 +1,4 @@
+import NodeToTarget  from './linkss'
 export function initGeneralMethods (VueLayer) {
   VueLayer.init = function (vm) {
     let vueLayerInstance = new VueLayer(vm)
@@ -9,7 +10,7 @@ export function initGeneralMethods (VueLayer) {
    */
   VueLayer.prototype = {
     $Notice(msg) {
-      console.log(msg)
+      console.log(msg+'NPM 开发环境')
     },
     // -->拓展类
     /**
@@ -33,6 +34,14 @@ export function initGeneralMethods (VueLayer) {
         this[key] = attrObj[key]
       }
       return this
-    }
+    },
+    $makeLink (dataNameSting) {
+      let vm = this._vm
+      let graphData = vm[dataNameSting]
+      let onId = '11224976'
+      let targetId = '11224977'
+      // console.log(graphData)
+      NodeToTarget.init(graphData, onId, targetId).run()
+    },
   }
 }
