@@ -43,5 +43,35 @@ export function initGeneralMethods (VueLayer) {
       // console.log(graphData)
       NodeToTarget.init(graphData, onId, targetId).run()
     },
+    $vueMixin () {
+
+    },
+    $mounted () {
+      let _vm = this._vm
+      console.log('dafds')
+      let _isMounted = _vm._isMounted
+      let obj = {year:212,md:12}
+      Object.defineProperty(obj, 'year', {
+        set: function (value) {
+          console.log(value+'被设置了')
+          return value
+        },
+        get: function () {
+          console.log('d', this)
+          return this
+        }
+      })
+      console.log(obj.year)
+      Object.defineProperty(this, '_vm', {
+        set: function (value) {
+          console.log(value+'被设置了')
+          return value
+        },
+        get: function () {
+          console.log(this)
+          return _isMounted
+        }
+      })
+    }
   }
 }

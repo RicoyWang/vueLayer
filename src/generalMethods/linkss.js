@@ -1,4 +1,8 @@
 import _ from 'lodash'
+
+/**
+ * 多个两点之间关系连线，构成关系网， 任意选择两个点，运算两个点到搭路径的几种方式，行走路径
+ */
 class NodeToTarget {
   constructor(graphData, onId, targetId) {
     this.nodes = graphData.nodes
