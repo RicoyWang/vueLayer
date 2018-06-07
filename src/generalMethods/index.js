@@ -1,4 +1,5 @@
 import NodeToTarget  from './linkss'
+import PubSubHandler from './PubSubHandler'
 export function initGeneralMethods (VueLayer) {
   VueLayer.init = function (vm) {
     let vueLayerInstance = new VueLayer(vm)
@@ -9,8 +10,9 @@ export function initGeneralMethods (VueLayer) {
    *  TODO 提供拓展接口 待优化
    */
   VueLayer.prototype = {
+    pubSubHandler:new PubSubHandler(),
     $Notice(msg) {
-      console.log(msg+'NPM 开发环境')
+      console.log(msg + ' from Notice')
     },
     // -->拓展类
     /**
@@ -35,6 +37,29 @@ export function initGeneralMethods (VueLayer) {
       }
       return this
     },
+    $on (event, fn) {
+      const layer= this
+      if (_.isArray(event)) {
+        for (let i = 0, l = event.length; i < l; i++) {
+          this.$on(event[i], fn)
+        }
+      } else {
+        (layer._events[event] || (layer._events[event] = [])).push(fn)
+      }
+      return layer
+    },
+    $emit (event) {
+      const layer = this
+      let cbs = layer._events[event]
+      if (cbs) {
+        cbs = cbs.length > 1 ? toArray(cbs) : cbs
+        const args = toArray(arguments, 1)
+        for (let i = 0, l = cbs.length; i < l; i++) {
+          cbs[i].apply(layer, args)
+        }
+      }
+      return layer
+    },
     $makeLink (dataNameSting) {
       let vm = this._vm
       let graphData = vm[dataNameSting]
@@ -43,35 +68,51 @@ export function initGeneralMethods (VueLayer) {
       // console.log(graphData)
       NodeToTarget.init(graphData, onId, targetId).run()
     },
-    $vueMixin () {
-
+    $mounted (param) {
+      return buildCircleLayerChain.call(this, param, '_isMounted')
     },
-    $mounted () {
-      let _vm = this._vm
-      console.log('dafds')
-      let _isMounted = _vm._isMounted
-      let obj = {year:212,md:12}
-      Object.defineProperty(obj, 'year', {
-        set: function (value) {
-          console.log(value+'被设置了')
-          return value
-        },
-        get: function () {
-          console.log('d', this)
-          return this
-        }
-      })
-      console.log(obj.year)
-      Object.defineProperty(this, '_vm', {
-        set: function (value) {
-          console.log(value+'被设置了')
-          return value
-        },
-        get: function () {
-          console.log(this)
-          return _isMounted
-        }
-      })
+    $destroy (param) {
+      return buildCircleLayerChain.call(this, param, '_isDestroyed')
+    },
+    $beingdestroy (param) {
+      return buildCircleLayerChain.call(this, param, '_isBeingDestroyed')
     }
   }
+}
+export function noop () {}
+
+/**
+ *
+ * @param param 如果是函数则为要生命周期时要执行的函数，如果为字符串，则为nameSpace 根据不同命名空间，执行不同订阅的事件
+ * @param circleName 多种不同生命钩子
+ */
+export function buildCircleLayerChain (param, circleName) {
+  let _vm = this._vm
+  let chainObject = {}
+  let fn
+  if (_.isFunction(param)) {
+    fn = param
+    chainObject =this
+  } else if (_.isString(param)) {
+    fn = this.pubSubHandler.$trigger.bind(this.pubSubHandler,param)
+    chainObject.on = this.pubSubHandler.$on.bind(this.pubSubHandler,param)
+  }
+  setDefineProperty(_vm, circleName, fn)
+  // 返回继续链式调用
+  return chainObject
+}
+// 构造计算属性
+export function setDefineProperty (vm, target, fn) {
+  let _isMounted = null
+  Object.defineProperty(vm, target, {
+    set: function (value) {
+      _isMounted = value
+      if (value === true) {
+        fn.call(this)
+      }
+    },
+    get: function () {
+      return _isMounted
+    }
+  })
 }
